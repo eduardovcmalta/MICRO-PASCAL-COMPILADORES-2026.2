@@ -14,6 +14,19 @@ As etapas seguintes (análise semântica e geração de código) serão desenvol
 - Ayrton Gomes Costa
 - Guilherme Eduardo Araujo da Silva
 
+## 👨‍💻 Divisão de Trabalho
+
+| Integrante | Responsabilidade | Arquivos |
+|---|---|---|
+| **Eduardo Veloso Chaves Malta** | Analisador Léxico (Lexer) — reconhecimento de todos os tokens, tratamento de erros léxicos | `src/lexer.c`, `include/lexer.h` |
+| **Ayrton Gomes Costa** | Parser — Estrutura e Comandos (`programa`, `bloco`, `atribuicao`, `iteracao`, `decisao`, `escrita`) | `src/parser.c` (estrutura) |
+| **Guilherme Eduardo Araujo da Silva** | Parser — Expressões (precedência de operadores) e integração geral do projeto | `src/parser.c` (expressões), `src/main.c` |
+
+### Fluxo de trabalho em Git
+
+- Cada integrante desenvolve sua parte em uma branch própria (`feature/lexer`, `feature/parser-comandos`, `feature/parser-expressoes`)
+- Integração feita via Pull Request, revisado pelos demais membros antes do merge na `main`
+
 ## 📖 Sobre a linguagem micro-Pascal
 
 Micro-Pascal é uma versão simplificada da linguagem Pascal, com estrutura de blocos aninhados (similar a C/Java). O compilador reconhece:
