@@ -46,21 +46,25 @@ end.
 
 ## 📁 Estrutura do projeto
 
+## 📁 Estrutura do repositório
+
+```
 micropascal-compiler/
 ├── src/
-│ ├── main.c # Ponto de entrada do programa
-│ ├── lexer.c # Implementação do analisador léxico
-│ ├── parser.c # Implementação do analisador sintático
+│   ├── main.c        # Ponto de entrada do programa
+│   ├── lexer.c        # Implementação do analisador léxico
+│   ├── parser.c        # Implementação do analisador sintático
 ├── include/
-│ ├── lexer.h
-│ ├── parser.h
-│ └── token.h # Definições de tokens compartilhadas
+│   ├── lexer.h
+│   ├── parser.h
+│   └── token.h        # Definições de tokens compartilhadas
 ├── testes/
-│ ├── exemplo1.pas
-│ └── exemplo2.pas
+│   ├── exemplo1.pas
+│   └── exemplo2.pas
 ├── Makefile
 ├── .gitignore
 └── README.md
+```
 
 
 ## ⚙️ Como compilar e executar
