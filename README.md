@@ -46,7 +46,6 @@ end.
 
 ## 📁 Estrutura do projeto
 
-## 📁 Estrutura do repositório
 
 ```
 micropascal-compiler/
