@@ -96,3 +96,28 @@ static void parser_bloco(Parser *parser){
     parser_lista_comandos(parser);
     parser_esperar(parser, TOKEN_END);
 }
+
+static void parser_lista_comandos(Parser *praser){
+    while (token_em(parser->token_atual.tipo, INICIO_COMANDO, 6)) parser_comando(parser);
+}
+
+static void parser_comando(Parser *parser) {
+    switch (parser->token_atual.tipo){
+    case TOKEN_BEGIN:
+        parser_bloco(parser);
+        parser_esperar(parser, TOKEN_PONTOVIRG);
+        return;
+    case TOKEN_IDENTIFICADOR:
+        parser_atribuicao(parser);
+        return;
+    case TOKEN_WHILE:
+    case TOKEN_REPEAT:
+        parser_iteracao(parser);
+        return;
+    case TOKEN_IF:
+        parser_decisao(parser);
+        return;
+    default:
+        parser_erro(parser);
+    }
+}
