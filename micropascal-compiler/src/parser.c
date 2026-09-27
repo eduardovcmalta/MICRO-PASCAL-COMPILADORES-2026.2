@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "../include/parser.h"
@@ -84,40 +85,101 @@ static void parser_decl_var(Parser *parser) {
     parser_tipo(parser);
     parser_esperar(parser, TOKEN_PONTOVIRG);
 }
-
-static void parser_tipo(Parser *parser){
+ 
+static void parser_tipo(Parser *parser) {
     TipoToken t = parser->token_atual.tipo;
-    if (t != TOKEN_INTEGER && t!= TOKEN_REAL && t!= TOKEN_CHAR) parser_erro(parser);
+    if (t != TOKEN_INTEGER && t != TOKEN_REAL && t != TOKEN_CHAR) parser_erro(parser);
     parser_avancar(parser);
 }
-
-static void parser_bloco(Parser *parser){
+ 
+static void parser_bloco(Parser *parser) {
     parser_esperar(parser, TOKEN_BEGIN);
     parser_lista_comandos(parser);
     parser_esperar(parser, TOKEN_END);
 }
-
-static void parser_lista_comandos(Parser *praser){
+ 
+static void parser_lista_comandos(Parser *parser) {
     while (token_em(parser->token_atual.tipo, INICIO_COMANDO, 6)) parser_comando(parser);
 }
-
+ 
 static void parser_comando(Parser *parser) {
-    switch (parser->token_atual.tipo){
-    case TOKEN_BEGIN:
-        parser_bloco(parser);
-        parser_esperar(parser, TOKEN_PONTOVIRG);
-        return;
-    case TOKEN_IDENTIFICADOR:
-        parser_atribuicao(parser);
-        return;
-    case TOKEN_WHILE:
-    case TOKEN_REPEAT:
-        parser_iteracao(parser);
-        return;
-    case TOKEN_IF:
-        parser_decisao(parser);
-        return;
-    default:
-        parser_erro(parser);
+    switch (parser->token_atual.tipo) {
+        case TOKEN_BEGIN:
+            parser_bloco(parser);
+            parser_esperar(parser, TOKEN_PONTOVIRG);
+            return;
+        case TOKEN_IDENTIFICADOR:
+            parser_atribuicao(parser);
+            return;
+        case TOKEN_WHILE:
+        case TOKEN_REPEAT:
+            parser_iteracao(parser);
+            return;
+        case TOKEN_IF:
+            parser_decisao(parser);
+            return;
+        case TOKEN_WRITE:
+            parser_escrita(parser);
+            return;
+        default:
+            parser_erro(parser);
     }
 }
+ 
+static void parser_atribuicao(Parser *parser) {
+    parser_esperar(parser, TOKEN_IDENTIFICADOR);
+    parser_esperar(parser, TOKEN_ATRIBUICAO);
+    parser_expressao(parser);
+    parser_esperar(parser, TOKEN_PONTOVIRG);
+}
+ 
+static void parser_iteracao(Parser *parser) {
+    if (parser->token_atual.tipo == TOKEN_WHILE) {
+        parser_avancar(parser);
+        parser_expressao(parser);
+        parser_esperar(parser, TOKEN_DO);
+        parser_comando(parser);
+        return;
+    }
+    parser_esperar(parser, TOKEN_REPEAT);
+    parser_comando(parser);
+    parser_esperar(parser, TOKEN_UNTIL);
+    parser_expressao(parser);
+    parser_esperar(parser, TOKEN_PONTOVIRG);
+}
+ 
+static void parser_decisao(Parser *parser) {
+    parser_esperar(parser, TOKEN_IF);
+    parser_expressao(parser);
+    parser_esperar(parser, TOKEN_THEN);
+    parser_comando(parser);
+    if (parser->token_atual.tipo == TOKEN_ELSE) {
+        parser_avancar(parser);
+        parser_comando(parser);
+    }
+}
+ 
+static void parser_escrita(Parser *parser) {
+    parser_esperar(parser, TOKEN_WRITE);
+    parser_esperar(parser, TOKEN_ABRE_PAREN);
+    parser_expressao(parser);
+    parser_esperar(parser, TOKEN_FECHA_PAREN);
+    parser_esperar(parser, TOKEN_PONTOVIRG);
+}
+ 
+static void parser_expressao(Parser *parser) {
+    parser_relacional(parser);
+    while (token_em(parser->token_atual.tipo, OP_OR_AND, 2)) {
+        parser_avancar(parser);
+        parser_relacional(parser);
+    }
+}
+ 
+static void parser_relacional(Parser *parser) {
+    parser_soma(parser);
+    while (token_em(parser->token_atual.tipo, OP_RELACIONAL, 6)) {
+        parser_avancar(parser);
+        parser_soma(parser);
+    }
+}
+ 
