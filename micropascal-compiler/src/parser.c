@@ -210,5 +210,5 @@ static void parser_fator(Parser *parser){
             return;
         default:
             parser_erro(parser);   
-    }
+    } 
 }
