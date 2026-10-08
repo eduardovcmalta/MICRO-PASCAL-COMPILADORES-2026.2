@@ -182,4 +182,33 @@ static void parser_relacional(Parser *parser) {
         parser_soma(parser);
     }
 }
- 
+
+static void parser_soma(Parser *parser){
+    parser_termo(parser);
+    while (token_em(parser->token_atual.tipo, OP_TERMO, 3)){
+        parser_avancar(parser);
+        parser_fator(parser);
+    }
+}
+
+static void parser_fator(Parser *parser){
+    switch (parser->token_atual.tipo){
+        case TOKEN_ABRE_PAREN:
+            parser_avancar(parser);
+            parser_expressao(parser);
+            parser_esperar(parser, TOKEN_FECHA_PAREN);
+            return;
+        case TOKEN_NOT:
+            parser_avancar(parser);
+            parser_expressao(parser);
+            return;
+        case TOKEN_INTEIRO_LITERAL:
+        case TOKEN_REAL_LITERAL:
+        case TOKEN_CHAR_LITERAL:
+        case TOKEN_IDENTIFICADOR:
+            parser_avancar(parser);
+            return;
+        default:
+            parser_erro(parser);   
+    }
+}
