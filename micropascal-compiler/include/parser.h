@@ -13,4 +13,4 @@ void parser_inicializar(Parser *parser, Lexer *lexer);
 
 void parser_analisar_programa(Parser *parser);
 
-#endif /* PARSER_H */
+#endif 
