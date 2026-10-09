@@ -108,11 +108,11 @@ gcc -Wall -Wextra -Iinclude src/*.c -o micropascal
 
 ## ✅ Funcionalidades implementadas
 
-- [ ] Analisador léxico completo (reconhecimento de todos os tokens)
-- [ ] Tratamento de erros léxicos (`Erro léxico no caracter [x]`)
-- [ ] Analisador sintático (gramática de micro-Pascal)
-- [ ] Tratamento de erros sintáticos (`Erro de sintaxe no token [lexema]`)
-- [ ] Testes com exemplos de código válidos
+- [X] Analisador léxico completo (reconhecimento de todos os tokens)
+- [X] Tratamento de erros léxicos (`Erro léxico no caracter [x]`)
+- [X] Analisador sintático (gramática de micro-Pascal)
+- [X] Tratamento de erros sintáticos (`Erro de sintaxe no token [lexema]`)
+- [X] Testes com exemplos de código válidos
 
 ## 🧪 Testes
 
