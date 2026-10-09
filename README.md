@@ -13,6 +13,7 @@ As etapas seguintes (análise semântica e geração de código) serão desenvol
 - Eduardo Veloso Chaves Malta
 - Ayrton Gomes Costa
 - Guilherme Eduardo Araujo da Silva
+- Renato Hideki
 
 ## 👨‍💻 Divisão de Trabalho
 
