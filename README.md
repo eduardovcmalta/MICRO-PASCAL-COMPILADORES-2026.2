@@ -75,7 +75,10 @@ micropascal-compiler/
 ├── testes/
 │   ├── exemplo1.pas
 │   ├── exemplo2.pas
-│   └── teste_lexer.pas
+│   ├── teste_lexer.pas
+│   └── e1.pas, e2.pas, e3.pas, e5.pas   # casos de erro
+├── rodar_testes.bat   # roda todos os testes (Windows)
+├── rodar_testes.sh    # roda todos os testes (Linux/Mac)
 ├── Makefile
 ├── .gitignore
 └── README.md
@@ -122,11 +125,14 @@ Os arquivos de teste estão na pasta `testes/`:
 
 - `exemplo1.pas` e `exemplo2.pas`: programas válidos em micro-Pascal, usados para validar o lexer e o parser.
 - `teste_lexer.pas`: cobre todos os tipos de token da especificação.
+- `e1.pas` e `e2.pas`: erros léxicos (caractere que não existe na linguagem e char literal com dois caracteres).
+- `e3.pas` e `e5.pas`: erros de sintaxe (falta o ponto e vírgula e `Begin` com B maiúsculo, já que a linguagem é case-sensitive).
 
-Para rodar todos os testes:
+Para compilar e rodar todos os testes, mostrando o código e a saída de cada um:
 
 ```bash
-for f in testes/*.pas; do ./micropascal $f; done
+rodar_testes.bat      # Windows
+sh rodar_testes.sh    # Linux/Mac
 ```
 
 Sem nenhuma saída, o programa foi aceito. Em caso de erro, a mensagem é impressa no `stderr` e o programa termina com código 1.
