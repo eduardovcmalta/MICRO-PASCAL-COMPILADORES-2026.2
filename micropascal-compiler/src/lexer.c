@@ -4,8 +4,6 @@
 #include <string.h>
 #include "../include/lexer.h"
 
-/* ==================== Inicialização / Finalização ==================== */
-
 void lexer_inicializar(Lexer *lexer, FILE *arquivo) {
     lexer->arquivo = arquivo;
     lexer->linha_atual = 1;
@@ -16,7 +14,16 @@ void lexer_finalizar(Lexer *lexer) {
     (void)lexer;
 }
 
-/* ==================== Auxiliares internas ==================== */
+#define TAM_MAX_LEXEMA 255
+
+static void erro_lexico(int c) {
+    if (c == EOF) {
+        fprintf(stderr, "Erro léxico: fim de arquivo inesperado\n");
+    } else {
+        fprintf(stderr, "Erro léxico no caracter [%c]\n", c);
+    }
+    exit(1);
+}
 
 static int avancar(Lexer *lexer) {
     int c = fgetc(lexer->arquivo);
@@ -25,7 +32,7 @@ static int avancar(Lexer *lexer) {
 }
 
 static void pular_comentario(Lexer *lexer) {
-    /* assume-se comentario estilo C++: // ate o fim da linha */
+
     while (lexer->caractere_atual != '\n' && lexer->caractere_atual != EOF) {
         avancar(lexer);
     }
@@ -40,14 +47,11 @@ static void pular_brancos(Lexer *lexer) {
             }
             avancar(lexer);
         } else if (lexer->caractere_atual == '/') {
-            long posicao = ftell(lexer->arquivo);
-            int c = avancar(lexer);
-            if (c == '/') {
+            int proximo = fgetc(lexer->arquivo);
+            if (proximo == '/') {
                 pular_comentario(lexer);
             } else {
-                /* nao era comentario: restaura o ponteiro do arquivo e o caractere atual */
-                fseek(lexer->arquivo, posicao, SEEK_SET);
-                lexer->caractere_atual = '/';
+                ungetc(proximo, lexer->arquivo);
                 return;
             }
         } else {
@@ -55,8 +59,6 @@ static void pular_brancos(Lexer *lexer) {
         }
     }
 }
-
-/* ==================== Palavras reservadas ==================== */
 
 static TipoToken verificar_palavra_reservada(const char *lexema) {
     if (strcmp(lexema, "program") == 0) return TOKEN_PROGRAM;
@@ -82,13 +84,12 @@ static TipoToken verificar_palavra_reservada(const char *lexema) {
     return TOKEN_IDENTIFICADOR;
 }
 
-/* ==================== Identificadores / Palavras reservadas ==================== */
-
 static Token ler_identificador(Lexer *lexer) {
     Token token;
     int i = 0;
 
     while (isalnum(lexer->caractere_atual) || lexer->caractere_atual == '_') {
+        if (i >= TAM_MAX_LEXEMA) erro_lexico(lexer->caractere_atual);
         token.lexema[i++] = (char)lexer->caractere_atual;
         avancar(lexer);
     }
@@ -99,21 +100,24 @@ static Token ler_identificador(Lexer *lexer) {
     return token;
 }
 
-/* ==================== Números (inteiro / real) ==================== */
-
 static Token ler_numero(Lexer *lexer) {
     Token token;
     int i = 0;
 
     while (isdigit(lexer->caractere_atual)) {
+        if (i >= TAM_MAX_LEXEMA) erro_lexico(lexer->caractere_atual);
         token.lexema[i++] = (char)lexer->caractere_atual;
         avancar(lexer);
     }
 
     if (lexer->caractere_atual == '.') {
+        if (i >= TAM_MAX_LEXEMA) erro_lexico('.');
         token.lexema[i++] = '.';
         avancar(lexer);
+
+        if (!isdigit(lexer->caractere_atual)) erro_lexico(lexer->caractere_atual);
         while (isdigit(lexer->caractere_atual)) {
+            if (i >= TAM_MAX_LEXEMA) erro_lexico(lexer->caractere_atual);
             token.lexema[i++] = (char)lexer->caractere_atual;
             avancar(lexer);
         }
@@ -126,8 +130,6 @@ static Token ler_numero(Lexer *lexer) {
     token.linha = lexer->linha_atual;
     return token;
 }
-
-/* ==================== Caractere literal ==================== */
 
 static Token ler_char_literal(Lexer *lexer) {
     Token token;
@@ -143,29 +145,17 @@ static Token ler_char_literal(Lexer *lexer) {
             token.lexema[i++] = (char)lexer->caractere_atual;
             avancar(lexer);
         } else {
-            printf("Erro léxico no caracter %c\n", lexer->caractere_atual);
-            token.tipo = TOKEN_ERRO;
-            token.linha = lexer->linha_atual;
-            avancar(lexer);
-            return token;
+            erro_lexico(lexer->caractere_atual);
         }
-    } else if (isalnum(lexer->caractere_atual)) {
+    } else if (isalnum(lexer->caractere_atual) || lexer->caractere_atual == '_') {
         token.lexema[i++] = (char)lexer->caractere_atual;
         avancar(lexer);
     } else {
-        printf("Erro léxico no caracter %c\n", lexer->caractere_atual);
-        token.tipo = TOKEN_ERRO;
-        token.linha = lexer->linha_atual;
-        avancar(lexer);
-        return token;
+        erro_lexico(lexer->caractere_atual);
     }
 
     if (lexer->caractere_atual != '\'') {
-        printf("Erro léxico no caracter %c\n", lexer->caractere_atual);
-        token.tipo = TOKEN_ERRO;
-        token.linha = lexer->linha_atual;
-        avancar(lexer);
-        return token;
+        erro_lexico(lexer->caractere_atual);
     }
 
     token.lexema[i++] = '\'';
@@ -176,8 +166,6 @@ static Token ler_char_literal(Lexer *lexer) {
     token.linha = lexer->linha_atual;
     return token;
 }
-
-/* ==================== Operadores / Símbolos especiais ==================== */
 
 static Token ler_operador_ou_simbolo(Lexer *lexer) {
     Token token;
@@ -237,16 +225,10 @@ static Token ler_operador_ou_simbolo(Lexer *lexer) {
         case '.': strcpy(token.lexema, "."); token.tipo = TOKEN_PONTO;       avancar(lexer); return token;
 
         default:
-            printf("Erro léxico no caracter %c\n", c);
-            token.lexema[0] = (char)c;
-            token.lexema[1] = '\0';
-            token.tipo = TOKEN_ERRO;
-            avancar(lexer);
+            erro_lexico(c);
             return token;
     }
 }
-
-/* ==================== Próximo token ==================== */
 
 Token lexer_proximo_token(Lexer *lexer) {
     pular_brancos(lexer);
@@ -265,6 +247,14 @@ Token lexer_proximo_token(Lexer *lexer) {
 
     if (isdigit(lexer->caractere_atual)) {
         return ler_numero(lexer);
+    }
+
+    if (lexer->caractere_atual == '.') {
+        int proximo = fgetc(lexer->arquivo);
+        ungetc(proximo, lexer->arquivo);
+        if (isdigit(proximo)) {
+            return ler_numero(lexer);
+        }
     }
 
     if (lexer->caractere_atual == '\'') {

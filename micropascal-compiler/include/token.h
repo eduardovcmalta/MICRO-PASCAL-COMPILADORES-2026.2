@@ -74,4 +74,5 @@ typedef struct {
     char lexema[256];   /* lexema textual do token */
     int linha;          /* linha onde o token foi encontrado (útil para erros) */
 } Token;
+
 #endif /* TOKEN_H */
