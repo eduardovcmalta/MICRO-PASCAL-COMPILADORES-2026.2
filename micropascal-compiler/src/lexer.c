@@ -248,6 +248,14 @@ Token lexer_proximo_token(Lexer *lexer) {
         return ler_numero(lexer);
     }
 
+    if (lexer->caractere_atual == '.') {
+        int proximo = fgetc(lexer->arquivo);
+        ungetc(proximo, lexer->arquivo);
+        if (isdigit(proximo)) {
+            return ler_numero(lexer);
+        }
+    }
+
     if (lexer->caractere_atual == '\'') {
         return ler_char_literal(lexer);
     }
