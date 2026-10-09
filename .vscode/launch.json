@@ -6,9 +6,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/micropascal-compiler/micropascal.exe",
-            "args": [
-                "micropascal-compiler/testes/exemplo1.pas"
-            ],
+            "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

@@ -47,7 +47,9 @@ static void parser_avancar(Parser *parser) {
 }
  
 static void parser_erro(Parser *parser) {
-    fprintf(stderr, "Erro de sintaxe no token %s\n", parser->token_atual.lexema);
+    if (parser->token_atual.tipo != TOKEN_ERRO) {
+        fprintf(stderr, "Erro de sintaxe no token %s\n", parser->token_atual.lexema);
+    }
     exit(1);
 }
  
@@ -185,9 +187,9 @@ static void parser_relacional(Parser *parser) {
 
 static void parser_soma(Parser *parser){
     parser_termo(parser);
-    while (token_em(parser->token_atual.tipo, OP_TERMO, 3)){
+    while (token_em(parser->token_atual.tipo, OP_SOMA, 2)){
         parser_avancar(parser);
-        parser_fator(parser);
+        parser_termo(parser);
     }
 }
 
