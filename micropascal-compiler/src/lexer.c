@@ -47,14 +47,11 @@ static void pular_brancos(Lexer *lexer) {
             }
             avancar(lexer);
         } else if (lexer->caractere_atual == '/') {
-            long posicao = ftell(lexer->arquivo);
-            int c = avancar(lexer);
-            if (c == '/') {
+            int proximo = fgetc(lexer->arquivo);
+            if (proximo == '/') {
                 pular_comentario(lexer);
             } else {
-
-                fseek(lexer->arquivo, posicao, SEEK_SET);
-                lexer->caractere_atual = '/';
+                ungetc(proximo, lexer->arquivo);
                 return;
             }
         } else {

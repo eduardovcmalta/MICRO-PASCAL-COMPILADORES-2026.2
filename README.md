@@ -26,7 +26,7 @@ As etapas seguintes (análise semântica e geração de código) serão desenvol
 
 ### Fluxo de trabalho em Git
 
-- Cada integrante desenvolve sua parte em uma branch própria (`feature/lexer`, `feature/parser-comandos`, `feature/parser-expressoes`)
+- Cada integrante desenvolve sua parte em uma branch própria (`dudu`, `ayrton`, `renato`, `guilherme`)
 - Integração feita via Pull Request, revisado pelos demais membros antes do merge na `main`
 
 ## 📖 Sobre a linguagem micro-Pascal
@@ -121,7 +121,7 @@ gcc -Wall -Wextra -Iinclude src/*.c -o micropascal
 Os arquivos de teste estão na pasta `testes/`:
 
 - `exemplo1.pas` e `exemplo2.pas`: programas válidos em micro-Pascal, usados para validar o lexer e o parser.
-- `teste_lexer.pas`: cobre todos os tipos de token da especificação. No final do arquivo há casos de erro léxico comentados, para testar as mensagens um de cada vez.
+- `teste_lexer.pas`: cobre todos os tipos de token da especificação.
 
 Para rodar todos os testes:
 
