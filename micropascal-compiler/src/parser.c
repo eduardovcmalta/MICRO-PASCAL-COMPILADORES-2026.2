@@ -208,7 +208,7 @@ static void parser_fator(Parser *parser){
             return;
         case TOKEN_NOT:
             parser_avancar(parser);
-            parser_fator(parser);
+            parser_expressao(parser);
             return;
         case TOKEN_INTEIRO_LITERAL:
         case TOKEN_REAL_LITERAL:
