@@ -4,7 +4,6 @@
 #include <string.h>
 #include "../include/lexer.h"
 
-/* ==================== Inicialização / Finalização ==================== */
 
 void lexer_inicializar(Lexer *lexer, FILE *arquivo) {
     lexer->arquivo = arquivo;
@@ -16,7 +15,6 @@ void lexer_finalizar(Lexer *lexer) {
     (void)lexer;
 }
 
-/* ==================== Auxiliares internas ==================== */
 
 static int avancar(Lexer *lexer) {
     int c = fgetc(lexer->arquivo);
@@ -56,7 +54,6 @@ static void pular_brancos(Lexer *lexer) {
     }
 }
 
-/* ==================== Palavras reservadas ==================== */
 
 static TipoToken verificar_palavra_reservada(const char *lexema) {
     if (strcmp(lexema, "program") == 0) return TOKEN_PROGRAM;
@@ -82,7 +79,6 @@ static TipoToken verificar_palavra_reservada(const char *lexema) {
     return TOKEN_IDENTIFICADOR;
 }
 
-/* ==================== Identificadores / Palavras reservadas ==================== */
 
 static Token ler_identificador(Lexer *lexer) {
     Token token;
@@ -99,7 +95,6 @@ static Token ler_identificador(Lexer *lexer) {
     return token;
 }
 
-/* ==================== Números (inteiro / real) ==================== */
 
 static Token ler_numero(Lexer *lexer) {
     Token token;
@@ -127,7 +122,6 @@ static Token ler_numero(Lexer *lexer) {
     return token;
 }
 
-/* ==================== Caractere literal ==================== */
 
 static Token ler_char_literal(Lexer *lexer) {
     Token token;
@@ -177,7 +171,6 @@ static Token ler_char_literal(Lexer *lexer) {
     return token;
 }
 
-/* ==================== Operadores / Símbolos especiais ==================== */
 
 static Token ler_operador_ou_simbolo(Lexer *lexer) {
     Token token;
@@ -246,7 +239,6 @@ static Token ler_operador_ou_simbolo(Lexer *lexer) {
     }
 }
 
-/* ==================== Próximo token ==================== */
 
 Token lexer_proximo_token(Lexer *lexer) {
     pular_brancos(lexer);
