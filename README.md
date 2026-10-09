@@ -116,7 +116,18 @@ gcc -Wall -Wextra -Iinclude src/*.c -o micropascal
 
 ## 🧪 Testes
 
-Os arquivos de teste estão na pasta `testes/`, contendo programas válidos em micro-Pascal utilizados para validar o funcionamento do lexer e do parser.
+Os arquivos de teste estão na pasta `testes/`:
+
+- `exemplo1.pas` e `exemplo2.pas`: programas válidos em micro-Pascal, usados para validar o lexer e o parser.
+- `teste_lexer.pas`: cobre todos os tipos de token da especificação. No final do arquivo há casos de erro léxico comentados, para testar as mensagens um de cada vez.
+
+Para rodar todos os testes:
+
+```bash
+for f in testes/*.pas; do ./micropascal $f; done
+```
+
+Sem nenhuma saída, o programa foi aceito. Em caso de erro, a mensagem é impressa no `stderr` e o programa termina com código 1.
 
 ## 📌 Observações
 
