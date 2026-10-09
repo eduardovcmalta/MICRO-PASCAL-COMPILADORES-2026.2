@@ -74,7 +74,8 @@ micropascal-compiler/
 │   └── token.h        # Definições de tokens compartilhadas
 ├── testes/
 │   ├── exemplo1.pas
-│   └── exemplo2.pas
+│   ├── exemplo2.pas
+│   └── teste_lexer.pas
 ├── Makefile
 ├── .gitignore
 └── README.md
@@ -84,9 +85,10 @@ micropascal-compiler/
 ## ⚙️ Como compilar e executar
 
 ### Pré-requisitos
-
+> Os comandos abaixo devem ser executados de dentro da pasta `micropascal-compiler/`.
 - GCC (ou outro compilador C compatível)
 - Make (opcional, mas recomendado)
+  
 
 ### Compilando com Make
 
