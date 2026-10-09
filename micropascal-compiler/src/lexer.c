@@ -17,7 +17,11 @@ void lexer_finalizar(Lexer *lexer) {
 #define TAM_MAX_LEXEMA 255
 
 static void erro_lexico(int c) {
-    printf("Erro léxico no caracter %c\n", c);
+    if (c == EOF) {
+        fprintf(stderr, "Erro léxico: fim de arquivo inesperado\n");
+    } else {
+        fprintf(stderr, "Erro léxico no caracter [%c]\n", c);
+    }
     exit(1);
 }
 
