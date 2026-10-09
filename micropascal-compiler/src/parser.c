@@ -69,7 +69,7 @@ void parser_analisar_programa(Parser *parser) {
     parser_esperar(parser, TOKEN_PONTOVIRG);
     parser_secao_var(parser);
     parser_bloco(parser);
-    parser_esperar(parser, TOKEN_PONTO);
+    if (parser->token_atual.tipo != TOKEN_PONTO) parser_erro(parser);
 }
  
 static void parser_secao_var(Parser *parser) {

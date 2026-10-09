@@ -16,15 +16,16 @@
  */
 
 int main(int argc, char *argv[]) {
+    FILE *arquivo;
     if (argc < 2) {
-        fprintf(stderr, "Uso: %s <arquivo_fonte>\n", argv[0]);
-        return EXIT_FAILURE;
-    }
-
-    FILE *arquivo = fopen(argv[1], "r");
-    if (arquivo == NULL) {
-        fprintf(stderr, "Erro: nao foi possivel abrir o arquivo '%s'\n", argv[1]);
-        return EXIT_FAILURE;
+        printf("Digite o codigo (finalize com Ctrl+Z e Enter no Windows, ou Ctrl+D no Linux):\n");
+        arquivo = stdin;
+    } else {
+        arquivo = fopen(argv[1], "r");
+        if (arquivo == NULL) {
+            fprintf(stderr, "Erro: nao foi possivel abrir o arquivo '%s'\n", argv[1]);
+            return EXIT_FAILURE;
+        }
     }
 
     Lexer lexer;
@@ -36,7 +37,7 @@ int main(int argc, char *argv[]) {
     parser_analisar_programa(&parser);
 
     lexer_finalizar(&lexer);
-    fclose(arquivo);
+    if (arquivo != stdin) fclose(arquivo);
 
     printf("Analise concluida com sucesso! Nenhum erro encontrado.\n");
     return EXIT_SUCCESS;
