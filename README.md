@@ -21,6 +21,7 @@ As etapas seguintes (análise semântica e geração de código) serão desenvol
 |---|---|---|
 | **Eduardo Veloso Chaves Malta** | Analisador Léxico (Lexer) — reconhecimento de todos os tokens, tratamento de erros léxicos | `src/lexer.c`, `include/lexer.h` |
 | **Ayrton Gomes Costa** | Parser — Estrutura e Comandos (`programa`, `bloco`, `atribuicao`, `iteracao`, `decisao`, `escrita`) | `src/parser.c` (estrutura) |
+| **Renato Ichigi** | Parser e Lexer — Estrutura e Comandos (`programa`, `correção`, `atribuicao`, `iteracao`, `escrita`) | `src/parser.c`, `src/lexer.c` |
 | **Guilherme Eduardo Araujo da Silva** | Parser — Expressões (precedência de operadores) e integração geral do projeto | `src/parser.c` (expressões), `src/main.c` |
 
 ### Fluxo de trabalho em Git
